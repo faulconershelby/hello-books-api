@@ -1,10 +1,17 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, abort, make_response
 
 class Book:
     def __init__(self, id, title, description):
         self.id = id 
         self.title = title
         self.description = description
+
+def to_dictionary(self):
+    return dict(
+            id = self.id,
+            title = self.title,
+            description = self.description
+    )
 
 books = [
     Book(1, "Braiding Sweetgrass", "non-fiction; Kimmerer uses botany and ancestreal knowledge "
@@ -19,7 +26,7 @@ books = [
 books_bp = Blueprint("books", __name__, url_prefix="/books")
 
 
-@books_bp.route("", methods = ["GET"])
+@books_bp.route("", methods = ("GET",))
 def manage_books():
     books_response = []
     for book in books:
@@ -30,13 +37,25 @@ def manage_books():
         })
     return jsonify(books_response), 200
 
-@books_bp.route("/<book_id>", methods =["GET"])
+
+@books_bp.route("/<book_id>", methods =("GET",))
 def manage_book(book_id):
-    book_id = int(book_id)
+    book = validate_book(book_id)
+    return {
+        "id" : book.id,
+        "title" : book.title,
+        "description" : book.description,
+        }
+
+
+def validate_book(book_id):
+    try:
+        book_id = int(book_id)
+    except:
+        abort(make_response({"message": f"book {book_id} invalid"}, 400))
+
     for book in books:
         if book.id == book_id:
-            return {
-                "id" : book.id,
-                "title" : book.title,
-                "description" : book.description,
-            }
+            return book
+    abort(make_response({"message":f"book {book_id} not found"}, 404))
+    
