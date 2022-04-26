@@ -6,12 +6,12 @@ class Book:
         self.title = title
         self.description = description
 
-def to_dictionary(self):
-    return dict(
-            id = self.id,
-            title = self.title,
-            description = self.description
-    )
+    def to_dictionary(self):
+        return dict(
+                id = self.id,
+                title = self.title,
+                description = self.description
+        )
 
 books = [
     Book(1, "Braiding Sweetgrass", "non-fiction; Kimmerer uses botany and ancestreal knowledge "
@@ -41,11 +41,7 @@ def manage_books():
 @books_bp.route("/<book_id>", methods =("GET",))
 def manage_book(book_id):
     book = validate_book(book_id)
-    return {
-        "id" : book.id,
-        "title" : book.title,
-        "description" : book.description,
-        }
+    return book.to_dictionary()
 
 
 def validate_book(book_id):
