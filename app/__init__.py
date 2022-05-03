@@ -13,8 +13,7 @@ def create_app(test_config=None):
 
     db.init_app(app)
     migrate.init_app(app, db)
-    ## flask is weird sometimes imports don't
-    ## go at the top 
+    # flask is weird sometimes imports don't go at the top 
     from app.models.book import Book
 
     from .routes import books_bp    
