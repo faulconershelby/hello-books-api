@@ -55,9 +55,9 @@ def manage_books():
 
 
 @books_bp.route("/<book_id>", methods=["GET"])
-def manage_book(book_id):
+def get_book_by_id(book_id):
     book = validate_book(book_id)
-    return book.to_dictionary()
+    return jsonify(book.to_dictionary())
 
 @books_bp.route("/<book_id>", methods=["PUT"])
 def replace_book_by_id(book_id):
@@ -85,21 +85,21 @@ def delete_book_by_id(book_id):
 
     return make_response(f" Book {book.title} sucessfully deleted.")
 
-# @books_bp.route("/<book_id>", methods = ["PATCH"])
-# def update_book_with_id(book_id):
-#     book = validate_book(book_id)
-#     request_body = request.get_json()
-#     book_keys = request_body.keys()
+@books_bp.route("/<book_id>", methods = ["PATCH"])
+def update_book_with_id(book_id):
+    book = validate_book(book_id)
+    request_body = request.get_json()
+    book_keys = request_body.keys()
 
-#     if "title" in book_keys:
-#         book.title = request_body["title"]
+    if "title" in book_keys:
+        book.title = request_body["title"]
 
-#     if "description" in book_keys:
-#         book.title = request_body["description"]
+    if "description" in book_keys:
+        book.description = request_body["description"]
     
-#     db.session.commit()
+    db.session.commit()
 
-#     return jsonify(book.to_dictionary())
+    return jsonify(book.to_dictionary())
 
 
 # def get_book_record_by_id(id):
@@ -119,8 +119,10 @@ def validate_book(book_id):
     
     book = Book.query.get(book_id)
 
-    for book in books:
-        if book.id == book_id:
-            return book
-    abort(make_response({"message":f"book {book_id} not found"}, 404))
+    # for book in books:
+    #     if book.id == book_id:
+    if not book:
+        abort(make_response({"message":f"book {book_id} not found"}, 404))
+
+    return book
     
