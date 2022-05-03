@@ -4,9 +4,16 @@ from app import db
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    title = db.Column(db.String)
+    title = db.Column(db.String, nullable=False)
     description = db.Column(db.String)
-    __tablename__ = "books"
+    # __tablename__ = "books"
 
     def to_string(self):
         return f"{self.id}: {self.title} Description: {self.description}"
+    
+    
+    def to_dictionary(self):
+        return dict(
+                id = self.id,
+                title = self.title,
+                description = self.description)
