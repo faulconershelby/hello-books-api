@@ -24,6 +24,12 @@ def handle_books():
 @books_bp.route("", methods=["GET"])
 def manage_books():
     books = Book.query.all()
+    title_query = request.args.get("title")
+    if title_query:
+        books = Book.query.filter_by(title=title_query)
+    else:
+        books = Book.query.all()
+    
     books_response = [book.to_dictionary() for book in books]
 
     return jsonify(books_response)
@@ -34,6 +40,7 @@ def get_book_by_id(book_id):
     book = validate_book(book_id)
 
     return jsonify(book.to_dictionary())
+
 
 
 @books_bp.route("/<book_id>", methods=["PUT"])
