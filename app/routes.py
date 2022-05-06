@@ -18,11 +18,12 @@ def handle_books():
     db.session.add(new_book)
     db.session.commit()
 
-    return make_response(f"Book {new_book.title} successfully added!", 201)
+    return make_response(jsonify(f'Book {new_book.title} successfully added'), 201)
 
 
 @books_bp.route("", methods=["GET"])
 def manage_books():
+    # return make_response("I'm a lil teapot", 418)
     books = Book.query.all()
     title_query = request.args.get("title")
     if title_query:
@@ -63,7 +64,7 @@ def delete_book_by_id(book_id):
     db.session.delete(book)
     db.session.commit()
 
-    return make_response(f" Book {book.title} sucessfully deleted.")
+    return make_response(jsonify(f" Book {book.title} sucessfully deleted."))
 
 
 @books_bp.route("/<book_id>", methods = ["PATCH"])
