@@ -23,10 +23,12 @@ def create_app(test_config=None):
     db.init_app(app)
     migrate.init_app(app, db)
     # flask is weird sometimes imports don't go at the top 
-    from app.models.book import Book
+    # from app.models.book import Book
 
     from .routes import books_bp    
+    from .author_routes import authors_bp
     app.register_blueprint(books_bp)
+    app.register_blueprint(authors_bp)
 
     return app 
 

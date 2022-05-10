@@ -6,7 +6,6 @@ from app.models.book import Book
 
 books_bp = Blueprint("books_bp", __name__, url_prefix="/books")
 
-
 @books_bp.route("", methods = ["POST"])
 def handle_books():
     request_body = request.get_json()
@@ -26,6 +25,7 @@ def manage_books():
     # return make_response("I'm a lil teapot", 418)
     books = Book.query.all()
     title_query = request.args.get("title")
+
     if title_query:
         books = Book.query.filter_by(title=title_query)
     else:
@@ -84,6 +84,7 @@ def update_book_with_id(book_id):
     return jsonify(book.to_dictionary())
 
 
+
 def validate_book(book_id):
     try:
         book_id = int(book_id)
@@ -93,7 +94,7 @@ def validate_book(book_id):
     book = Book.query.get(book_id)
 
     if not book:
-        abort(make_response({"message":f"book {book_id} not found"}, 404))
+        abort(make_response({"message": f"book {book_id} not found"}, 404))
 
     return book
     
