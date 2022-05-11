@@ -25,8 +25,8 @@ def create_app(test_config=None):
     # flask is weird sometimes imports don't go at the top 
     # from app.models.book import Book
 
-    from .routes import books_bp    
-    from .author_routes import authors_bp
+    from .routes.class_routes import books_bp    
+    from .routes.author_routes import authors_bp
     app.register_blueprint(books_bp)
     app.register_blueprint(authors_bp)
 
